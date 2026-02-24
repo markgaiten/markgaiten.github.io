@@ -1,95 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Yu-Gi-Oh!</title>
-    <link rel="icon" type="image/png" href="https://i.imgur.com/3iM01sR.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blue-Eyes Archetype · Yu-Gi-Oh!</title>
+  <link rel="icon" type="image/png" href="https://i.imgur.com/3iM01sR.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            font-family: "Poppins", sans-serif;
-        }
+  <style>
+    :root {
+      --bg:      #fefae0;
+      --surface: #e9edc9;
+      --border:  #ccd5ae;
+      --ink:     #4a3728;
+      --muted:   #8a7560;
+      --accent:  #d4a373;
+    }
 
-        .header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-        }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Mulish', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; }
 
-        .header-image {
-            width: 100%;
-            max-width: 1200px;
-            height: auto;
-        }
+    /* ── NAVBAR ── */
+    .navbar { background: var(--bg); border-bottom: 1px solid var(--border); padding: .9rem 0; position: sticky; top: 0; z-index: 100; }
+    .navbar-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 700; color: var(--ink) !important; }
+    .navbar-brand .dot { color: var(--accent); }
+    .btn-back {
+      font-size: .75rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--muted); border: 1px solid var(--border); border-radius: 2px;
+      padding: .4rem 1rem; background: transparent; text-decoration: none;
+      transition: background .2s, color .2s, border-color .2s;
+    }
+    .btn-back:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-        .card {
-            text-decoration: none;
-            text-align: center;
-        }
-    </style>
+    /* ── HERO ── */
+    .page-hero {
+      background: radial-gradient(ellipse 60% 60% at 80% 50%, rgba(212,163,115,.18) 0%, transparent 65%), var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 3.5rem 0 2.5rem;
+    }
+    .section-label { font-size: .68rem; font-weight: 600; letter-spacing: 3.5px; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; line-height: 1.1; color: var(--ink); margin-bottom: .6rem; }
+    .page-sub { font-size: .9rem; color: var(--muted); }
+    .card-count { font-size: .8rem; color: var(--muted); margin-top: .4rem; }
+    .card-count span { color: var(--accent); font-weight: 700; }
+
+    /* ── GRID ── */
+    .grid-wrap { padding: 3rem 0 5rem; }
+
+    .ygo-card-link { text-decoration: none; display: block; height: 100%; }
+
+    .ygo-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s;
+      cursor: pointer;
+    }
+    .ygo-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba(74,55,40,.12);
+      border-color: var(--accent);
+    }
+    .ygo-card-img {
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .ygo-card-img img { width: 120px; height: auto; border-radius: 4px; box-shadow: 0 6px 20px rgba(74,55,40,.15); display: block; }
+    .ygo-card-body { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; gap: .35rem; flex: 1; }
+    .ygo-card-type { font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+    .ygo-card-name { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: var(--ink); line-height: 1.3; }
+    .ygo-card-stats { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: .2rem; }
+    .stat-pill { font-size: .62rem; font-weight: 600; background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: .15rem .5rem; color: var(--muted); }
+    .stat-pill b { color: var(--ink); }
+
+    /* ── STATES ── */
+    .state-msg { text-align: center; padding: 5rem 2rem; }
+    .state-msg .icon { font-size: 3rem; margin-bottom: 1rem; }
+    .state-msg h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--ink); margin-bottom: .5rem; }
+    .state-msg p { color: var(--muted); font-size: .9rem; }
+    .spinner-border { color: var(--accent) !important; width: 2.5rem; height: 2.5rem; }
+  </style>
 </head>
-
 <body>
-    <!-- Header -->
-    <div class="header">
-        <a href="#">
-            <img src="images/yugioh.png" alt="Yu-GI-Oh Blue-Eyes Archetype" class="header-image" />
-        </a>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+  <div class="container d-flex align-items-center justify-content-between">
+    <a class="navbar-brand" href="../../index.html">Markr<span class="dot">.</span></a>
+    <a href="../../index.html#projects" class="btn-back">← Back</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="page-hero">
+  <div class="container">
+    <p class="section-label">Activity 04 · Yu-Gi-Oh! API</p>
+    <h1 class="page-title">Blue-Eyes Archetype</h1>
+    <p class="page-sub">Browse all cards in the Blue-Eyes archetype. Click a card to view its details.</p>
+    <p class="card-count" id="card-count"></p>
+  </div>
+</div>
+
+<!-- ── CARD GRID ── -->
+<div class="grid-wrap">
+  <div class="container">
+    <div class="row g-4" id="card-grid">
+      <div class="col-12 text-center py-5">
+        <div class="d-flex justify-content-center mb-3">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        <p style="color:var(--muted); font-size:.9rem;">Fetching cards...</p>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- Gallery -->
-    <div class="container-fluid">
-        <div class="row m-5" id="card-container"></div>
-    </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script>
+  const grid = document.getElementById("card-grid");
+  const countEl = document.getElementById("card-count");
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+  fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?archetype=Blue-Eyes")
+    .then(res => {
+      if (!res.ok) throw new Error("Network error");
+      return res.json();
+    })
+    .then(data => {
+      const cards = data.data;
+      countEl.innerHTML = `<span>${cards.length}</span> cards found`;
 
-    <!-- API -->
-    <script>
-        fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?archetype=Blue-Eyes")
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Fetch Response Error");
-                }
+      grid.innerHTML = cards.map(card => {
+        const stats = [];
+        if (card.atk !== undefined) stats.push(`<span class="stat-pill">ATK <b>${card.atk}</b></span>`);
+        if (card.def !== undefined) stats.push(`<span class="stat-pill">DEF <b>${card.def}</b></span>`);
+        if (card.level)             stats.push(`<span class="stat-pill">Lv <b>${card.level}</b></span>`);
 
-                return response.json();
-            })
-
-            .then((data) => {
-                const cardContainer = document.getElementById("card-container");
-                cardContainer.innerHTML = "";
-
-                const card = data.data;
-
-                card.forEach((card) => {
-                    const cardCard = `
-
-                    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-                        <a href="view.html?name=${encodeURIComponent(card.name)}" class="card m-2 p-1 shadow">
-                        <div class="card-body">
-                            <img class="card-img-top" src=" ${card.card_images[0].image_url}">
-                            <h4 class="card-title my-3"> ${card.name} </h4>
-                            <p class="card-text"> ${card.type} </p>
-                        </div>
-                    </a>
+        return `
+          <div class="col-6 col-md-4 col-lg-3">
+            <a href="view?name=${encodeURIComponent(card.name)}" class="ygo-card-link">
+              <div class="ygo-card">
+                <div class="ygo-card-img">
+                  <img src="${card.card_images[0].image_url_small}" alt="${card.name}" loading="lazy">
                 </div>
-
-                `;
-                cardContainer.innerHTML += cardCard;
-                });
-            })
-
-            .catch((error) => {
-                console.error("There is a problem with the Fetch Response", error);
-            });
-    </script>
+                <div class="ygo-card-body">
+                  <span class="ygo-card-type">${card.type}</span>
+                  <span class="ygo-card-name">${card.name}</span>
+                  ${stats.length ? `<div class="ygo-card-stats">${stats.join('')}</div>` : ''}
+                </div>
+              </div>
+            </a>
+          </div>`;
+      }).join('');
+    })
+    .catch(err => {
+      console.error(err);
+      grid.innerHTML = `
+        <div class="col-12">
+          <div class="state-msg">
+            <div class="icon">⚠️</div>
+            <h3>Failed to Load</h3>
+            <p>Could not fetch cards from the API. Please check your connection and try again.</p>
+          </div>
+        </div>`;
+    });
+</script>
 </body>
-
 </html>

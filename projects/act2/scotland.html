@@ -7,214 +7,483 @@
     <title>Scotland</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/3iM01sR.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+        crossorigin="anonymous" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Mulish:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&display=swap');
+        :root {
+            --bg: #fefae0;
+            --surface: #e9edc9;
+            --border: #ccd5ae;
+            --ink: #4a3728;
+            --muted: #8a7560;
+            --accent: #d4a373;
+        }
 
-        * {
-            margin: 0;
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
+            margin: 0;
             padding: 0;
-            color: #2A3663;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: "Bitter", serif;
+            font-family: 'Mulish', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
             overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--ink);
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            padding: .9rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--ink) !important;
+        }
+
+        .navbar-brand .dot {
+            color: var(--accent);
+        }
+
+        .btn-back {
+            font-size: .75rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: .4rem 1rem;
+            background: transparent;
+            text-decoration: none;
+            transition: background .2s, color .2s, border-color .2s;
+        }
+
+        .btn-back:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        /* ── HERO BANNER ── */
+        .hero-banner {
+            position: relative;
+            height: 480px;
+            overflow: hidden;
+        }
+
+        .hero-banner img {
             width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
-        .container,
-        .row,
-        .col {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 0;
+        .hero-banner-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(74, 55, 40, .15), rgba(74, 55, 40, .65));
+            display: flex;
+            align-items: flex-end;
+            padding: 3rem;
         }
 
-        /* Description */
-        .description {
-            margin-top: 0;
+        .hero-eyebrow {
+            font-size: .72rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: .5rem;
         }
 
-        .custom-image {
-            max-height: 300px;
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            color: #fff;
+            line-height: 1;
+        }
+
+        /* ── DESCRIPTION ── */
+        .description-section {
+            padding: 5rem 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .scotland-logo {
+            max-height: 160px;
             object-fit: contain;
+            display: block;
+            margin: 0 auto 2.5rem;
         }
 
-        @media (max-width: 768px) {
-            .custom-image {
-                max-height: 100px;
-            }
+        .section-label {
+            font-size: .68rem;
+            font-weight: 600;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: .5rem;
         }
 
-        .profile-detail p {
-            margin: 5px 10px;
-            font-size: 20px;
-            color: #2A3663;
-            align-items: center;
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-divider {
+            width: 48px;
+            height: 2px;
+            background: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .desc-text {
+            font-size: .97rem;
+            line-height: 1.85;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        .desc-text:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ── PLACES ── */
+        .places-section {
+            padding: 5.5rem 0;
+            background: var(--bg);
+        }
+
+        .place-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            height: 100%;
+            transition: transform .3s ease, box-shadow .3s ease, border-color .3s;
+        }
+
+        .place-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 40px rgba(74, 55, 40, .12);
+            border-color: var(--accent);
+        }
+
+        .place-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .place-card-body {
+            padding: 1.3rem;
+            display: flex;
+            flex-direction: column;
+            gap: .4rem;
+        }
+
+        .place-number {
+            font-size: .62rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .place-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.3;
+        }
+
+        .place-text {
+            font-size: .85rem;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        /* ── FACTS ── */
+        .facts-section {
+            padding: 5.5rem 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+        }
+
+        .fact-item {
+            padding: 2rem 1.5rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            height: 100%;
+            text-align: center;
+            transition: border-color .3s, box-shadow .3s;
+        }
+
+        .fact-item:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 30px rgba(74, 55, 40, .08);
+        }
+
+        .fact-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .fact-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--ink);
+            line-height: 1.5;
+        }
+
+        .fact-text b {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: #faedcd;
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
             text-align: center;
         }
 
-        @media (max-width: 576px) {
-            .profile-detail p {
-                font-size: 16px;
-            }
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--ink);
         }
 
-        /* Spots */
-        .card-img-top {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
+        .footer-brand .dot {
+            color: var(--accent);
         }
 
-        @media (max-width: 768px) {
-            .row {
-                padding-left: 0;
-                padding-right: 0;
-            }
-
-            .card {
-                margin-bottom: 15px;
-            }
-        }
-
-        /* Facts */
-        @media (max-width: 768px) {
-            h1.display-2 {
-                font-size: 2.5rem;
-            }
-
-            h4 {
-                font-size: 1.1rem;
-            }
+        .footer-note {
+            font-size: .75rem;
+            color: var(--muted);
+            margin-top: .3rem;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 
 <body>
-    <!-- Banner -->
-    <div class="header">
-        <img class="img-fluid w-100" src="images/4.png" />
+
+    <!-- ── NAVBAR ── -->
+    <nav class="navbar">
+        <div class="container d-flex align-items-center justify-content-between">
+            <a class="navbar-brand" href="../../index.html">Markr<span class="dot">.</span></a>
+            <a href="javascript:history.back()" class="btn-back">← Back</a>
+        </div>
+    </nav>
+
+    <!-- ── HERO BANNER ── -->
+    <div class="hero-banner">
+        <img src="images/4.png" alt="Scotland">
+        <div class="hero-banner-overlay">
+            <div>
+                <p class="hero-eyebrow">Activity 02 · Bootstrap Website</p>
+                <h1 class="hero-title">Scotland</h1>
+            </div>
+        </div>
     </div>
 
-    <!-- Description -->
-    <div class="container-fluid description d-flex justify-content-center align-items-center p-0 mb-4">
-        <img src="images/scotland.png" alt="Scotland" class="img-fluid w-100 custom-image">
-    </div>
-    <div class="row">
-        <div class="col profile-detail">
-            <p> Scotland is a country in Europe and is part of the island of Great Britain (Europe's Largest Island)
-                alongside England, Wales, and Northern Island.
-                This lush beautiful country is bursting with green spaces, lush forests, towering mountains and vast
-                lochs (the Scottish word for lakes!).</p>
-            <p>
-                This country can be roughly divided into three areas - Lowlands, Highlands and Islands. The Lowlands
-                are
+    <!-- ── DESCRIPTION ── -->
+    <section class="description-section">
+        <div class="container" style="max-width: 860px;">
+            <img src="images/scotland.png" alt="Scotland" class="scotland-logo">
+            <p class="section-label">About the Country</p>
+            <h2 class="section-title">Land of Lochs & Legends</h2>
+            <div class="section-divider"></div>
+            <p class="desc-text">
+                Scotland is a country in Europe and is part of the island of Great Britain (Europe's Largest Island)
+                alongside England, Wales, and Northern Ireland. This lush beautiful country is bursting with green
+                spaces,
+                lush forests, towering mountains and vast lochs (the Scottish word for lakes!).
+            </p>
+            <p class="desc-text">
+                This country can be roughly divided into three areas — Lowlands, Highlands and Islands. The Lowlands are
                 known for their fertile farmland and thick woodlands, the Highlands for their towering mountains,
-                sweeping moorland and deep lochs, and the Island for their compact wild landscapes, beautiful
-                beaches
-                and far-reaching sea views.
+                sweeping
+                moorland and deep lochs, and the Islands for their compact wild landscapes, beautiful beaches and
+                far-reaching sea views.
             </p>
         </div>
-    </div>
-    </div>
+    </section>
 
-    <!-- Spots -->
-    <div class="container-fluid">
-        <div class="row my-5 p-5">
-            <h1 class="display-2 p-4 m-2" style="text-align: center;"> Places to Visit in Scotland</h1>
-            <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                <div class="card m-3 shadow">
-                    <img src="images/8.png" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title"> Edinburgh Castle </h5>
-                        <p class="card-text"> Perched atop Castle Rock, Edinburgh Castle is a historic fortress that
-                            offers panoramic views of the city and houses Scotland's Crown Jewels.
-                            It has played a key role in Scottish history for centuries.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                <div class="card m-3 shadow">
-                    <img src="images/9.png" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title"> Kelvingrove Art Museum </h5>
-                        <p class="card-text"> Located in Glasgow, Kelvingrove Art Museum is home to an extensive
-                            collection of art, artifacts, and natural history exhibits.
-                            Its impressive architecture and free admission make it a popular cultural destination.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                <div class="card m-3 shadow">
-                    <img src="images/10.png" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title"> Culzean Castle </h5>
-                        <p class="card-text"> Overlooking the Firth of Clyde, Culzean Castle is an elegant 18th-century
-                            mansion known for its grand interiors and scenic cliffside gardens.
-                            The castle is a popular spot for exploring Scottish history and nature.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                <div class="card m-3 shadow">
-                    <img src="images/7.png" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title"> Portree, Isle of Skye </h5>
-                        <p class="card-text"> Portree is a picturesque harbor town on the Isle of Skye, famous for its
-                            colorful buildings and dramatic coastal landscapes.
-                            It's a gateway for exploring the island's natural beauty and hiking trails.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                <div class="card m-3 shadow">
-                    <img src="images/5.png" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title"> The Calanais Standing Stones </h5>
-                        <p class="card-text"> The Calanais Standing Stones are an ancient stone circle located on the
-                            Isle of Lewis, dating back over 5,000 years.
-                            These mysterious megaliths are steeped in legend and offer insight into prehistoric life.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                <div class="card m-3 shadow">
-                    <img src="images/3.png" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title"> The Jacobite Steam Train </h5>
-                        <p class="card-text"> The Jacobite Steam Train is a historic train that travels through the
-                            scenic West Highland Line, famously passing over the Glenfinnan Viaduct.
-                            It is often associated with its appearance in the Harry Potter films.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- ── PLACES ── -->
+    <section class="places-section">
+        <div class="container">
+            <p class="section-label">Explore</p>
+            <h2 class="section-title mb-4">Places to Visit in Scotland</h2>
+            <div class="row g-4">
 
-    <div class="row p-5 m-5 text-center">
-        <h1 class="display-2 p-4">Facts about Scotland</h1>
-        <div class="col-12 col-sm-6 col-md-3">
-            <h4>The official animal of Scotland is the <b>Unicorn</b>.</h4>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="place-card">
+                        <img src="images/8.png" alt="Edinburgh Castle">
+                        <div class="place-card-body">
+                            <span class="place-number">01</span>
+                            <h5 class="place-title">Edinburgh Castle</h5>
+                            <p class="place-text">Perched atop Castle Rock, Edinburgh Castle is a historic fortress that
+                                offers panoramic views of the city and houses Scotland's Crown Jewels. It has played a
+                                key role in Scottish history for centuries.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="place-card">
+                        <img src="images/9.png" alt="Kelvingrove Art Museum">
+                        <div class="place-card-body">
+                            <span class="place-number">02</span>
+                            <h5 class="place-title">Kelvingrove Art Museum</h5>
+                            <p class="place-text">Located in Glasgow, Kelvingrove Art Museum is home to an extensive
+                                collection of art, artifacts, and natural history exhibits. Its impressive architecture
+                                and free admission make it a popular cultural destination.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="place-card">
+                        <img src="images/10.png" alt="Culzean Castle">
+                        <div class="place-card-body">
+                            <span class="place-number">03</span>
+                            <h5 class="place-title">Culzean Castle</h5>
+                            <p class="place-text">Overlooking the Firth of Clyde, Culzean Castle is an elegant
+                                18th-century mansion known for its grand interiors and scenic cliffside gardens. A
+                                popular spot for exploring Scottish history and nature.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="place-card">
+                        <img src="images/7.png" alt="Portree, Isle of Skye">
+                        <div class="place-card-body">
+                            <span class="place-number">04</span>
+                            <h5 class="place-title">Portree, Isle of Skye</h5>
+                            <p class="place-text">Portree is a picturesque harbor town on the Isle of Skye, famous for
+                                its colorful buildings and dramatic coastal landscapes. A gateway for exploring the
+                                island's natural beauty and hiking trails.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="place-card">
+                        <img src="images/5.png" alt="The Calanais Standing Stones">
+                        <div class="place-card-body">
+                            <span class="place-number">05</span>
+                            <h5 class="place-title">The Calanais Standing Stones</h5>
+                            <p class="place-text">An ancient stone circle on the Isle of Lewis, dating back over 5,000
+                                years. These mysterious megaliths are steeped in legend and offer insight into
+                                prehistoric life.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="place-card">
+                        <img src="images/3.png" alt="The Jacobite Steam Train">
+                        <div class="place-card-body">
+                            <span class="place-number">06</span>
+                            <h5 class="place-title">The Jacobite Steam Train</h5>
+                            <p class="place-text">A historic train travelling through the scenic West Highland Line,
+                                famously passing over the Glenfinnan Viaduct — known for its appearance in the Harry
+                                Potter films.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-3">
-            <h4>Scotland has approximately <b>790 Islands</b>.</h4>
+    </section>
+
+    <!-- ── FACTS ── -->
+    <section class="facts-section">
+        <div class="container">
+            <p class="section-label">Did You Know?</p>
+            <h2 class="section-title mb-4">Facts about Scotland</h2>
+            <div class="row g-4">
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="fact-item">
+                        <div class="fact-icon">🦄</div>
+                        <p class="fact-text">The official animal of Scotland is the <b>Unicorn</b>.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="fact-item">
+                        <div class="fact-icon">🏝️</div>
+                        <p class="fact-text">Scotland has approximately <b>790 Islands</b>.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="fact-item">
+                        <div class="fact-icon">🌲</div>
+                        <p class="fact-text">Scotland is home to the <b>oldest tree in Europe</b> — a twisted yew,
+                            around for 3,000 years.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="fact-item">
+                        <div class="fact-icon">💧</div>
+                        <p class="fact-text">There are over <b>600 square miles</b> of freshwater lakes.</p>
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-3">
-            <h4>Scotland is home to the oldest tree in Europe. It is a twisted yew, and it has been around for 3,000
-                years.</h4>
-        </div>
-        <div class="col-12 col-sm-6 col-md-3">
-            <h4>There are over <b>600 square miles of freshwater lakes</b>.</h4>
-        </div>
-    </div>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer>
+        <div class="footer-brand">Markr<span class="dot">.</span></div>
+        <p class="footer-note">Activity 02 · Bootstrap Website · Scotland</p>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 </body>
 

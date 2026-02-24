@@ -1,82 +1,350 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Yu-Gi-Oh! Card Details</title>
-    <link rel="icon" type="image/png" href="https://i.imgur.com/3iM01sR.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yu-Gi-Oh! Card Details</title>
+  <link rel="icon" type="image/png" href="https://i.imgur.com/3iM01sR.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            color: #8c7623;
-            font-family: "Poppins", sans-serif;
-        }
+  <style>
+    :root {
+      --bg:      #fefae0;
+      --surface: #e9edc9;
+      --border:  #ccd5ae;
+      --ink:     #4a3728;
+      --muted:   #8a7560;
+      --accent:  #d4a373;
+    }
 
-        .card-details {
-            margin: 20px auto;
-            max-width: 800px;
-        }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
-        .card-details img {
-            width: 100%;
-            height: auto;
-        }
-    </style>
+    body {
+      font-family: 'Mulish', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: .9rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .navbar-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--ink) !important;
+    }
+    .navbar-brand .dot { color: var(--accent); }
+    .btn-back {
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: .4rem 1rem;
+      background: transparent;
+      text-decoration: none;
+      transition: background .2s, color .2s, border-color .2s;
+    }
+    .btn-back:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* ── CONTENT ── */
+    .page-wrap { padding: 3.5rem 0 5rem; }
+
+    .crumb {
+      font-size: .72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    /* ── DETAIL CARD ── */
+    .detail-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(74,55,40,.08);
+    }
+
+    .card-img-col {
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 2rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .card-img-col img {
+      max-width: 260px;
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 12px 40px rgba(74,55,40,.2);
+      display: block;
+      cursor: zoom-in;
+      transition: transform .2s ease;
+    }
+    .card-img-col img:hover { transform: scale(1.03); }
+
+    /* ── ZOOM OVERLAY ── */
+    .zoom-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(30,20,10,.85);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+      backdrop-filter: blur(4px);
+    }
+    .zoom-overlay.active { display: flex; }
+    .zoom-overlay img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 8px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.6);
+      animation: zoomIn .2s ease;
+    }
+    .zoom-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.5rem;
+      color: #fff;
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+      opacity: .7;
+      transition: opacity .2s;
+      background: none;
+      border: none;
+    }
+    .zoom-close:hover { opacity: 1; }
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .card-info-col {
+      padding: 2.2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.2rem;
+    }
+
+    .card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+
+    .card-divider {
+      width: 48px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: .6rem;
+    }
+
+    .info-row {
+      display: flex;
+      flex-direction: column;
+      gap: .8rem;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: .15rem;
+      padding-bottom: .8rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .info-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .info-label {
+      font-size: .65rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .info-value {
+      font-size: .95rem;
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    .stat-badges { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .stat-badge {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--ink);
+      padding: .3rem .75rem;
+    }
+    .stat-badge span { color: var(--accent); }
+
+    /* ── STATES ── */
+    .state-msg { text-align: center; padding: 5rem 2rem; }
+    .state-msg .icon { font-size: 3rem; margin-bottom: 1rem; }
+    .state-msg h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--ink); margin-bottom: .5rem; }
+    .state-msg p { color: var(--muted); font-size: .9rem; }
+    .spinner-border { color: var(--accent) !important; width: 2.5rem; height: 2.5rem; }
+
+    @media (max-width: 767px) {
+      .card-img-col { border-right: none; border-bottom: 1px solid var(--border); padding: 1.5rem; }
+      .card-info-col { padding: 1.5rem; }
+    }
+  </style>
 </head>
-
 <body>
-    <div class="container card-details" id="card-details"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+  <div class="container d-flex align-items-center justify-content-between">
+    <a class="navbar-brand" href="../../index.html">Markr<span class="dot">.</span></a>
+    <a href="javascript:history.back()" class="btn-back">← Back</a>
+  </div>
+</nav>
 
-    <script>
-        function getURLParameter(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
+<!-- ── CONTENT ── -->
+<div class="page-wrap">
+  <div class="container" style="max-width: 860px;">
+    <p class="crumb">Activity 04 · Yu-Gi-Oh! API</p>
+    <div id="card-details">
+      <div class="state-msg">
+        <div class="d-flex justify-content-center mb-3">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        <p style="color:var(--muted); font-size:.9rem;">Fetching card data...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ZOOM OVERLAY ── -->
+<div class="zoom-overlay" id="zoomOverlay" onclick="closeZoom()">
+  <button class="zoom-close" onclick="closeZoom()">✕</button>
+  <img id="zoomImg" src="" alt="">
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script>
+  function getURLParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  }
+
+  const cardName = getURLParameter("name");
+  const container = document.getElementById("card-details");
+
+  function showError(title, msg) {
+    container.innerHTML = `
+      <div class="state-msg">
+        <div class="icon">⚠️</div>
+        <h3>${title}</h3>
+        <p>${msg}</p>
+      </div>`;
+  }
+
+  if (!cardName) {
+    showError("No Card Specified", "Please go back and select a card from the list.");
+  } else {
+    fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?archetype=Blue-Eyes")
+      .then(res => {
+        if (!res.ok) throw new Error("Network error");
+        return res.json();
+      })
+      .then(data => {
+        const card = data.data.find(c => c.name === cardName);
+        if (!card) {
+          showError("Card Not Found", `Could not find "${cardName}" in the Blue-Eyes archetype.`);
+          return;
         }
 
-        const cardName = getURLParameter("name");
+        const stats = [];
+        if (card.atk !== undefined) stats.push(`<span class="stat-badge">ATK <span>${card.atk}</span></span>`);
+        if (card.def !== undefined) stats.push(`<span class="stat-badge">DEF <span>${card.def}</span></span>`);
+        if (card.level)             stats.push(`<span class="stat-badge">Level <span>${card.level}</span></span>`);
+        if (card.attribute)         stats.push(`<span class="stat-badge">Attr <span>${card.attribute}</span></span>`);
+        if (card.race)              stats.push(`<span class="stat-badge">${card.race}</span>`);
 
-        if (cardName) {
-            fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?archetype=Blue-Eyes")
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Fetch Response Error");
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    const card = data.data.find((c) => c.name === cardName);
+        container.innerHTML = `
+          <div class="detail-card">
+            <div class="row g-0">
+              <div class="col-md-5 card-img-col">
+                <img src="${card.card_images[0].image_url}" alt="${card.name}" onclick="openZoom(this.src, this.alt)">
+              </div>
+              <div class="col-md-7 card-info-col">
+                <div>
+                  <h1 class="card-name">${card.name}</h1>
+                  <div class="card-divider"></div>
+                </div>
+                <div class="info-row">
+                  <div class="info-item">
+                    <span class="info-label">Type</span>
+                    <span class="info-value">${card.type}</span>
+                  </div>
+                  ${stats.length ? `
+                  <div class="info-item">
+                    <span class="info-label">Stats</span>
+                    <div class="stat-badges mt-1">${stats.join('')}</div>
+                  </div>` : ''}
+                  <div class="info-item">
+                    <span class="info-label">Description</span>
+                    <span class="info-value">${card.desc}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>`;
+      })
+      .catch(err => {
+        console.error(err);
+        showError("Failed to Load", "There was an error fetching the card. Please try again.");
+      });
+  }
 
-                    if (card) {
-                        const cardDetails = document.getElementById("card-details");
-                        cardDetails.innerHTML = `
-                            <div class="card shadow">
-                                <img src="${card.card_images[0].image_url}" class="card-img-top" alt="${card.name}">
-                                <div class="card-body">
-                                    <h2 class="card-title" style="text-align: center; font-weight: bold;">${card.name}</h2>
-                                    <p><strong>Type:</strong> ${card.type}</p>
-                                    <p><strong>Description:</strong> ${card.desc}</p>
-                                </div>
-                            </div>
-                        `;
-                    } else {
-                        document.getElementById("card-details").innerHTML = "<p>Card not found!</p>";
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error fetching card details:", error);
-                    document.getElementById("card-details").innerHTML = "<p>Error loading card details.</p>";
-                });
-        } else {
-            document.getElementById("card-details").innerHTML = "<p>No card specified in the URL.</p>";
-        }
-    </script>
+  function openZoom(src, alt) {
+    document.getElementById("zoomImg").src = src;
+    document.getElementById("zoomImg").alt = alt;
+    document.getElementById("zoomOverlay").classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeZoom() {
+    document.getElementById("zoomOverlay").classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeZoom();
+  });
+</script>
 </body>
-
 </html>
