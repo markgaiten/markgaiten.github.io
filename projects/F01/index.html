@@ -73,6 +73,7 @@
         body {
             padding-top: 60px;
         }
+
         .navbar-brand {
             font-size: 20px;
             color: var(--gold) !important;
@@ -399,6 +400,20 @@
             border-color: var(--gold);
         }
 
+        /* BACK BUTTON */
+        .back-btn {
+            color: var(--gold) !important;
+            border: 1px solid var(--gold);
+            border-radius: 5px;
+            padding: 4px 12px !important;
+            transition: background-color 0.2s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--gold);
+            color: var(--midnight) !important;
+        }
+
         @media (max-width: 768px) {
             .saga-row {
                 flex-wrap: wrap;
@@ -448,6 +463,9 @@
                         <li class="nav-item"><a class="nav-link" href="#about"> About </a></li>
                         <li class="nav-item"><a class="nav-link" href="#character"> Characters </a></li>
                         <li class="nav-item"><a class="nav-link" href="#saga"> Sagas </a></li>
+                        <li class="nav-item">
+                            <a class="nav-link back-btn" href="../../index.html"> &#8592; Back </a>
+                        </li>
                     </ul>
                 </div>
             </div>
